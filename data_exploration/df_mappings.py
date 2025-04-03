@@ -87,11 +87,11 @@ def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2'):
     i2 = pd.Series(iter_2)
 
     # Create a DataFrame with unique values from both iterators
-    r['values'] = pd.concat([i1, i2]).unique()
+    r['iter_1 U iter_2'] = pd.concat([i1, i2]).unique()
     # Count occurrences of each unique value in the first iterator
-    r['count in iter_1'] = r['values'].map(i1.value_counts())
+    r['count in iter_1'] = r['iter_1 U iter_2'].map(i1.value_counts())
     # Count occurrences of each unique value in the second iterator
-    r['count in iter_2'] = r['values'].map(i2.value_counts())
+    r['count in iter_2'] = r['iter_1 U iter_2'].map(i2.value_counts())
 
     # Print out: the number of NANs in each iterator;
     # the percentage of 1 to 1 mapping
