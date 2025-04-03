@@ -82,17 +82,25 @@ def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2'):
     of the element are present in iter_1; the third field ndicates how many occurrences of the element are present in iter_2. The
     data frame is ordered as to show first the elements present in only one of the two iterables.
     '''
+    r = pd.DataFrame()
     i1 = pd.Series(iter_1)
     i2 = pd.Series(iter_2)
-    count_1 = i1.value_counts()
-    count_2 = i2.value_counts()
 
-    full_list = concat(i1, i2).uniques()
-    # splice together a dataframe where field_1 = full_list, field_2 = occurrences in i1, field_3 = occurrences in i2
-    r = pd.DataFrame(full_list)
-    r.colnames = (values, 'count in ' + name_1, 'count in ' + name_2)
-    r['field_1'] = count_1[r['values']] 
-    r['field_2'] = field_2
+    # Create a DataFrame with unique values from both iterators
+    r['values'] = pd.concat([i1, i2]).unique()
+    # Count occurrences of each unique value in the first iterator
+    r['count in iter_1'] = r['values'].map(i1.value_counts())
+    # Count occurrences of each unique value in the second iterator
+    r['count in iter_2'] = r['values'].map(i2.value_counts())
+
+    # Print out: the number of NANs in each iterator;
+    # the percentage of 1 to 1 mapping
+    # print('Number of NaNs in iter_1:', i1.isna().sum())
+    # print('Number of NaNs in iter_2:', i2.isna().sum())
+
+    # sort r 
+    # replace nans in r with 0
+    return r
 
 def xs2ys(iter_1, iter_2):
     '''
