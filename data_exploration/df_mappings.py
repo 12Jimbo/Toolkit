@@ -73,3 +73,32 @@ def foreign_k2k(series_1, series_2, df1_name = 'table1', df2_name = 'table2', n_
         return df[df[c_2] < n_matches]
     if mode == '!=':
         return df[df[c_2] != n_matches]
+
+def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2'):
+    '''
+    This function is intended to check whether two iterables have the same values, i.e. whether a 1 to 1 mapping is possible.
+    Provided iter_1 and iter_2, xs2xs checks whether there are values in one of them that are absent in the other.
+    It returns a data frame where the first field lists all values in either iterable; the second field indicates how many occurrences
+    of the element are present in iter_1; the third field ndicates how many occurrences of the element are present in iter_2. The
+    data frame is ordered as to show first the elements present in only one of the two iterables.
+    '''
+    i1 = pd.Series(iter_1)
+    i2 = pd.Series(iter_2)
+    count_1 = i1.value_counts()
+    count_2 = i2.value_counts()
+
+    full_list = concat(i1, i2).uniques()
+    # splice together a dataframe where field_1 = full_list, field_2 = occurrences in i1, field_3 = occurrences in i2
+    r = pd.DataFrame(full_list)
+    r.colnames = (values, 'count in ' + name_1, 'count in ' + name_2)
+    r['field_1'] = count_1[r['values']] 
+    r['field_2'] = field_2
+
+def xs2ys(iter_1, iter_2):
+    '''
+    This function is intended to check whether two columns of a dataframe form couples that define 
+    a 1 to 1 function, a many to 1 function, a 1 to many relation, or a many to many relation.
+    It will work with any two same length iterables, but remember: it's very sensitive to sorting.
+    '''
+    i1 = pd.Series(iter_1)
+    i2 = pd.Series(iter_2)
