@@ -1,5 +1,5 @@
-import char_cleaning
-import grammar_elements
+from char_cleaning import clean, clean_ends
+from grammar_elements import punctuations, articles, conjunctions, prepositions, pronouns, prefixes, auxiliary_verbs, adverbs
 
 def words_grinder(strings, clean_punct = True, garbage_list = None):
   # This function will take a Pandas Series of dated strings,
