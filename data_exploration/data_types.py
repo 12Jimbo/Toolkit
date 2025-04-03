@@ -1,7 +1,7 @@
 import pandas as pd
   
 def col_types(df):
-  ''''
+  '''
   In: a data frame df
   Out: prints the number of element types found in each column of a given df
   '''
@@ -17,11 +17,11 @@ def col_types(df):
 def nan2nan(df, col_1_name, col_2_name):
     '''
     Given 2 columns in a data frame df, this function
-    returns a list with the number of NaNs in the first,
+    prints the number of NaNs in the first,
     The number of NaNs in the second,
     And the number fo rows where both cols have NaN value
     '''
-    
+
     col_1 = col_1_name 
     col_2 = col_2_name
     
