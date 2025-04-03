@@ -1,7 +1,8 @@
 import pandas as pd
   
 def col_types(df):
-# prints out the number of element types found in each column of a given df
+# In: a data frame df
+# Out: prints the number of element types found in each column of a given df
   for i in df.columns:
         print(
             df[i].map(type).value_counts(),
