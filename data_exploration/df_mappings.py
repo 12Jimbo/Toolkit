@@ -74,7 +74,7 @@ def foreign_k2k(series_1, series_2, df1_name = 'table1', df2_name = 'table2', n_
     if mode == '!=':
         return df[df[c_2] != n_matches]
 
-def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2', values = list(set(iter_1) | set(iter_2))):
+def xs2xs(iter_1 = None, iter_2 = None, name_1 = 'iter_1', name_2 = 'iter_2', values = None)):
     '''
     This function is intended to check whether two iterables have the same values, i.e. whether a 1 to 1 mapping is possible.
     Provided iter_1 and iter_2, xs2xs checks whether there are values in one of them that are absent in the other.
@@ -82,14 +82,22 @@ def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2', values = list(se
     of the element are present in iter_1; the third field ndicates how many occurrences of the element are present in iter_2. The
     data frame is ordered as to show first the elements present in only one of the two iterables.
     '''
-    r = pd.DataFrame()
-    i1 = pd.Series(iter_1)
-    i2 = pd.Series(iter_2)
-    r['selected_values'] = pd.Series(values)
+    # By default the function will use all values present in at leas one of the two iterables
+    if values == None:
+        values = list(set(iter_1) | set(iter_2)
 
-    # Assigning names to the occurrences columns
+    # Defining the output dataframe:
+    # The first column will contain a list of unique values
+    r = pd.DataFrame()
+    r['selected_values'] = pd.Series(values.unique())
+
+    # Other fields will count the occurrences of the selected values in each iterable
     count_1 = f'occurrences in {name_1}'
     count_2 = f'occurrences in {name_2}'
+
+    # Turning input iterables to Series for easier manipulation
+    i1 = pd.Series(iter_1)
+    i2 = pd.Series(iter_2)
 
     # Count occurrences of each unique value in the first iterator, managing NaN values
     r[count_1] = r[values].map(lambda x: i1.value_counts()[x] if x in i1.value_counts() else i1.isna().sum() if pd.isna(x) else 0)
@@ -97,7 +105,7 @@ def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2', values = list(se
     # Count occurrences of each unique value in the second iterator, managing NaN values
     r[count_2] = r[values].map(lambda x: i2.value_counts()[x] if x in i2.value_counts() else i2.isna().sum() if pd.isna(x) else 0)
 
-    # Show unmatched values first
+    # Show absent values first
     r = r.sort_values(by=[count_1, count_2], ascending=[True, True])
 
     # Print stuff that is good to know:
