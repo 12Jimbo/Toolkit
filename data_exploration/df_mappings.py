@@ -118,15 +118,16 @@ def xs2xs(iter_1 = None, iter_2 = None, name_1 = 'iter_1', name_2 = 'iter_2', va
     nans_2 = i2.isna().sum()
     nans_2_relative = nans_2 / len(i2) * 100
     # 2. The percentage of 1 to 1 mapping
-    unmatched = ((r[count_1] == 0) | (r[count_2] == 0)).sum()
-    unmatched_relative = unmatched / len(r) * 100
-    bijective_mapping_relative = 100 - unmatched_relative
+    unmatched_1 = (r[count_1] == 0).sum()
+    unmatched_relative_1 = unmatched_1 / len(r) * 100
+    bijectivity_1 = 100 - unmatched_relative_1
+    unmatched_2 = (r[count_2] == 0).sum()
+    unmatched_relative_2 = unmatched_2 / len(r) * 100
+    bijectivity_2 = 100 - unmatched_relative_2
 
-    print(f'Number of NaNs in {name_1}: {nans_1} ({nans_1_relative:.2f}%)')
-    print(f'Number of NaNs in {name_2}: {nans_2} ({nans_2_relative:.2f}%)')
-    print(f'Percentage of unmatched values: {unmatched_relative:.2f}%')
-    print(f'Percentage of bijective mapping: {bijective_mapping_relative:.2f}%')
-
+    print(f'{name_1}: #NaNs : {nans_1} ({nans_1_relative:.2f}%) | #unmatched: {unmatched_1} ({unmatched_relative_1:.2f}%) | 1 to 1 mappings: {bijectivity_1:.2f}%')
+    print(f'{name_2}: #NaNs : {nans_2} ({nans_2_relative:.2f}%) | #unmatched: {unmatched_2} ({unmatched_relative_2:.2f}%) | 1 to 1 mappings: {bijectivity_2:.2f}%')
+    
     return r
 
 def xs2ys(iter_1, iter_2):
