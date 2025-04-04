@@ -39,3 +39,7 @@ data_text = {
 }
 
 df_text = pd.DataFrame(data_text)
+
+
+iter_1 = [1, 2, 3, 4, 5, 6, np.nan, np.nan, 3, 3]
+iter_2 = [1, 5, 3, 3, 4, 5, 8, np.nan]

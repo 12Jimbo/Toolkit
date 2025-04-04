@@ -129,8 +129,8 @@ def xs2xs(iter_1 = None, iter_2 = None, name_1 = 'iter_1', name_2 = 'iter_2', va
     unmatched_relative_2 = unmatched_2 / len(r) * 100
     bijectivity_2 = 100 - unmatched_relative_2
 
-    print(f'{name_1}: #NaNs : {nans_1} ({nans_1_relative:.2f}%) | #unmatched: {unmatched_1} ({unmatched_relative_1:.2f}%) | 1 to 1 mappings: {bijectivity_1:.2f}%')
-    print(f'{name_2}: #NaNs : {nans_2} ({nans_2_relative:.2f}%) | #unmatched: {unmatched_2} ({unmatched_relative_2:.2f}%) | 1 to 1 mappings: {bijectivity_2:.2f}%')
+    print(f'{name_1}: #NaNs : {nans_1} ({nans_1_relative:.2f}%) | #unmatched values: {unmatched_1} ({unmatched_relative_1:.2f}%) | 1 to 1 mapping: {bijectivity_1:.2f}%')
+    print(f'{name_2}: #NaNs : {nans_2} ({nans_2_relative:.2f}%) | #unmatched values: {unmatched_2} ({unmatched_relative_2:.2f}%) | 1 to 1 mapping: {bijectivity_2:.2f}%')
     
     return r
 
