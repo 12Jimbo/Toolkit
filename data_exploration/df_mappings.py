@@ -74,7 +74,7 @@ def foreign_k2k(series_1, series_2, df1_name = 'table1', df2_name = 'table2', n_
     if mode == '!=':
         return df[df[c_2] != n_matches]
 
-def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2'):
+def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2', select_values_from = 'either'):
     '''
     This function is intended to check whether two iterables have the same values, i.e. whether a 1 to 1 mapping is possible.
     Provided iter_1 and iter_2, xs2xs checks whether there are values in one of them that are absent in the other.
@@ -90,18 +90,22 @@ def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2'):
     values = 'All values'
     count_1 = f'occurrences in {name_1}'
     count_2 = f'occurrences in {name_2}'
+    
     # Create a DataFrame with unique values from both iterators
-    r[values] = pd.concat([i1, i2]).unique()
-    
-    # Count occurrences of each unique value in the first iterator
-    r[count_1] = r[values].map(i1.value_counts())
-    
-    # Count occurrences of each unique value in the second iterator
-    r[count_2] = r[values].map(i2.value_counts())
+    if select_values_from == 'either':    
+        r[values] = pd.concat([i1, i2]).unique()
+    elif select_values_from == 'both':
+        r[values] = pd.Series(list(set(i1) & set(i2)))
+    elif select_values_from == 'left':
+        r[values] = pd.Series(list(set(i1) - set(i2)))
+    elif select_values_from == 'right':
+        r[values] = pd.Series(list(set(i2) - set(i1)))
 
-    # NaN values counts actually indicate 0 occurrences 
-    r[count_1] = r[count_1].fillna(0)
-    r[count_2] = r[count_2].fillna(0)
+    # Count occurrences of each unique value in the first iterator, managing NaN values
+    r[count_1] = r[values].map(lambda x: i1.value_counts()[x] if x in i1.value_counts() else i1.isna().sum() if pd.isna(x) else 0)
+
+    # Count occurrences of each unique value in the second iterator, managing NaN values
+    r[count_2] = r[values].map(lambda x: i2.value_counts()[x] if x in i2.value_counts() else i2.isna().sum() if pd.isna(x) else 0)
 
     # Show unmatched values first
     r = r.sort_values(by=[count_1, count_2], ascending=[True, True])
