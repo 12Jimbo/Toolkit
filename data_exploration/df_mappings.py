@@ -100,13 +100,13 @@ def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2'):
     r[count_2] = r[values].map(i2.value_counts())
 
     # NaN values counts actually indicate 0 occurrences 
-    r = r[count_1].fillna(0)
-    r = r[count_2].fillna(0)
+    r[count_1] = r[count_1].fillna(0)
+    r[count_2] = r[count_2].fillna(0)
 
     # Show unmatched values first
     r = r.sort_values(by=[count_1, count_2], ascending=[True, True])
 
-    # Stuff that is good to know:
+    # Print stuff that is good to know:
     # 1. The number of NaNs in each iterator
     nans_1 = i1.isna().sum()
     nans_1_relative = nans_1 / len(i1) * 100
