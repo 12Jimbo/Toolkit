@@ -74,7 +74,7 @@ def foreign_k2k(series_1, series_2, df1_name = 'table1', df2_name = 'table2', n_
     if mode == '!=':
         return df[df[c_2] != n_matches]
 
-def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2', select_values_from = 'either'):
+def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2', select_values_from = 'union'):
     '''
     This function is intended to check whether two iterables have the same values, i.e. whether a 1 to 1 mapping is possible.
     Provided iter_1 and iter_2, xs2xs checks whether there are values in one of them that are absent in the other.
@@ -85,21 +85,24 @@ def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2', select_values_fr
     r = pd.DataFrame()
     i1 = pd.Series(iter_1)
     i2 = pd.Series(iter_2)
-
-    # Assigning names to the columns
-    values = 'All values'
-    count_1 = f'occurrences in {name_1}'
-    count_2 = f'occurrences in {name_2}'
     
-    # Create a DataFrame with unique values from both iterators
-    if select_values_from == 'either':    
-        r[values] = pd.concat([i1, i2]).unique()
-    elif select_values_from == 'both':
+    # Create the DataFrame of unique values from either or both iterators
+    if select_values_from == 'union':
+        values = f'Values in {name_1} UNION {name_2}'
+        r[values] = pd.Series(list(set(i1) | set(i2)))
+    elif select_values_from == 'intersection':
+        values = f'Values in {name_1} INTERSECTION {name_2}'
         r[values] = pd.Series(list(set(i1) & set(i2)))
     elif select_values_from == 'left':
+        values = f'Values in {name_1} ONLY'
         r[values] = pd.Series(list(set(i1) - set(i2)))
     elif select_values_from == 'right':
+        values = f'Values in {name_2} ONLY'
         r[values] = pd.Series(list(set(i2) - set(i1)))
+
+    # Assigning names to the occurrences columns
+    count_1 = f'occurrences in {name_1}'
+    count_2 = f'occurrences in {name_2}'
 
     # Count occurrences of each unique value in the first iterator, managing NaN values
     r[count_1] = r[values].map(lambda x: i1.value_counts()[x] if x in i1.value_counts() else i1.isna().sum() if pd.isna(x) else 0)
