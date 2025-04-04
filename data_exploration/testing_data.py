@@ -1,6 +1,6 @@
 # A few dataframes, series and lists for testing functions
 import pandas as pd
-import numpy as np:
+import numpy as np
 
 data_multitype = {
     'Column1': [1, 2.5, 3, 4.8, 5],     # Mixed integers and floats
