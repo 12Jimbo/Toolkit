@@ -84,12 +84,12 @@ def xs2xs(iter_1 = None, iter_2 = None, name_1 = 'iter_1', name_2 = 'iter_2', va
     '''
     # By default the function will use all values present in at leas one of the two iterables
     if values == None:
-        values = list(set(iter_1) | set(iter_2))
+        values = pd.Series(list(set(iter_1) | set(iter_2)))
 
     # Defining the output dataframe:
     # The first column will contain a list of unique values
     r = pd.DataFrame()
-    r['selected_values'] = pd.Series(values.unique())
+    r['selected_values'] = values.unique()
 
     # Other fields will count the occurrences of the selected values in each iterable
     count_1 = f'occurrences in {name_1}'
