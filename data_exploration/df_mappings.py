@@ -95,10 +95,10 @@ def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2', select_values_fr
         r[values] = pd.Series(list(set(i1) & set(i2)))
     elif select_values_from == 'left':
         values = f'Values in {name_1} ONLY'
-        r[values] = pd.Series(list(set(i1) - set(i2)))
+        r[values] = i1
     elif select_values_from == 'right':
         values = f'Values in {name_2} ONLY'
-        r[values] = pd.Series(list(set(i2) - set(i1)))
+        r[values] = 12
 
     # Assigning names to the occurrences columns
     count_1 = f'occurrences in {name_1}'
