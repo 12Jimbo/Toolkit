@@ -74,7 +74,7 @@ def foreign_k2k(series_1, series_2, df1_name = 'table1', df2_name = 'table2', n_
     if mode == '!=':
         return df[df[c_2] != n_matches]
 
-def xs2xs(iter_1 = None, iter_2 = None, name_1 = 'iter_1', name_2 = 'iter_2', values = None)):
+def xs2xs(iter_1 = None, iter_2 = None, name_1 = 'iter_1', name_2 = 'iter_2', values = None):
     '''
     This function is intended to check whether two iterables have the same values, i.e. whether a 1 to 1 mapping is possible.
     Provided iter_1 and iter_2, xs2xs checks whether there are values in one of them that are absent in the other.
