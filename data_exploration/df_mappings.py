@@ -112,6 +112,8 @@ def xs2xs(iter_1 = None, iter_2 = None, name_1 = 'iter_1', name_2 = 'iter_2', va
     r = r.drop_duplicates()
     # Show absent values first
     r = r.sort_values(by=[count_1, count_2], ascending=[True, True])
+    # Reset index
+    r = r.reset_index(drop=True)
 
     # Print stuff that is good to know:
     # 1. The number of NaNs in each iterator
