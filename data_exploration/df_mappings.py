@@ -108,6 +108,8 @@ def xs2xs(iter_1 = None, iter_2 = None, name_1 = 'iter_1', name_2 = 'iter_2', va
     # Count occurrences of each unique value in the second iterator, managing NaN values
     r[count_2] = r['selected_values'].map(lambda x: int(i2.value_counts()[x]) if x in i2.value_counts() else i2.isna().sum() if pd.isna(x) else 0)
 
+    # Remove duplicates
+    r = r.drop_duplicates()
     # Show absent values first
     r = r.sort_values(by=[count_1, count_2], ascending=[True, True])
 
