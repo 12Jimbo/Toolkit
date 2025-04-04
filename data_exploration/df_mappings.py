@@ -88,18 +88,35 @@ def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2'):
 
     # Create a DataFrame with unique values from both iterators
     r['iter_1 U iter_2'] = pd.concat([i1, i2]).unique()
+    
     # Count occurrences of each unique value in the first iterator
     r['count in iter_1'] = r['iter_1 U iter_2'].map(i1.value_counts())
+    
     # Count occurrences of each unique value in the second iterator
     r['count in iter_2'] = r['iter_1 U iter_2'].map(i2.value_counts())
 
-    # Print out: the number of NANs in each iterator;
-    # the percentage of 1 to 1 mapping
-    # print('Number of NaNs in iter_1:', i1.isna().sum())
-    # print('Number of NaNs in iter_2:', i2.isna().sum())
+    # NaNs are actually values with 0 occurrences 
+    r = r.fillna(0)
 
-    # sort r 
-    # replace nans in r with 0
+    # Show unmatched values first
+    r = r.sort_values(by=['count in iter_1', 'count in iter_2'], ascending=[True, True])
+
+    # Stuff that is good to know:
+    # 1. The number of NaNs in each iterator
+    nans_1 = i1.isna().sum()
+    nans_1_relative = nans_1 / len(i1) * 100
+    nans_2 = i2.isna().sum()
+    nans_2_relative = nans_2 / len(i2) * 100
+    # 2. The percentage of 1 to 1 mapping
+    unmatched = ((r['count in iter_1'] == 0) | (r['count in iter_2'] == 0)).sum()
+    unmatched_relative = unmatched / len(r) * 100
+    bijective_mapping_relative = 100 - unmatched_relative
+
+    print(f'Number of NaNs in {name_1}: {nans_1} ({nans_1_relative:.2f}%)')
+    print(f'Number of NaNs in {name_2}: {nans_2} ({nans_2_relative:.2f}%)')
+    print(f'Percentage of unmatched values: {unmatched_relative:.2f}%')
+    print(f'Percentage of bijective mapping: {bijective_mapping_relative:.2f}%')
+
     return r
 
 def xs2ys(iter_1, iter_2):
