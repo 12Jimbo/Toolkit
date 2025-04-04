@@ -85,6 +85,8 @@ def xs2xs(iter_1 = None, iter_2 = None, name_1 = 'iter_1', name_2 = 'iter_2', va
     # By default the function will use all values present in at leas one of the two iterables
     if values == None:
         values = pd.Series(list(set(iter_1) | set(iter_2)))
+    else:
+        values = pd.Series(values)
 
     # Defining the output dataframe:
     # The first column will contain a list of unique values
