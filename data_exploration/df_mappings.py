@@ -99,8 +99,9 @@ def xs2xs(iter_1, iter_2, name_1 = 'iter_1', name_2 = 'iter_2'):
     # Count occurrences of each unique value in the second iterator
     r[count_2] = r[values].map(i2.value_counts())
 
-    # NaNs are actually values with 0 occurrences 
-    r = r.fillna(0)
+    # NaN values counts actually indicate 0 occurrences 
+    r = r[count_1].fillna(0)
+    r = r[count_2].fillna(0)
 
     # Show unmatched values first
     r = r.sort_values(by=[count_1, count_2], ascending=[True, True])
