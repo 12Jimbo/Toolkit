@@ -82,30 +82,31 @@ def xs2xs(iter_1 = None, iter_2 = None, name_1 = 'iter_1', name_2 = 'iter_2', va
     of the element are present in iter_1; the third field ndicates how many occurrences of the element are present in iter_2. The
     data frame is ordered as to show first the elements present in only one of the two iterables.
     '''
+    
+    # Turning input iterables to Series for easier manipulation
+    i1 = pd.Series(iter_1)
+    i2 = pd.Series(iter_2)
+
     # By default the function will use all values present in at leas one of the two iterables
     if values == None:
-        values = pd.Series(list(set(iter_1) | set(iter_2)))
+        values = pd.Series(pd.concat([i1, i2]).unique())
     else:
         values = pd.Series(values)
 
     # Defining the output dataframe:
     # The first column will contain a list of unique values
     r = pd.DataFrame()
-    r['selected_values'] = values.unique()
+    r['selected_values'] = values
 
     # Other fields will count the occurrences of the selected values in each iterable
     count_1 = f'occurrences in {name_1}'
     count_2 = f'occurrences in {name_2}'
 
-    # Turning input iterables to Series for easier manipulation
-    i1 = pd.Series(iter_1)
-    i2 = pd.Series(iter_2)
-
     # Count occurrences of each unique value in the first iterator, managing NaN values
-    r[count_1] = r[values].map(lambda x: i1.value_counts()[x] if x in i1.value_counts() else i1.isna().sum() if pd.isna(x) else 0)
+    r[count_1] = r['selected_values'].map(lambda x: int(i1.value_counts()[x]) if x in i1.value_counts() else i1.isna().sum() if pd.isna(x) else 0)
 
     # Count occurrences of each unique value in the second iterator, managing NaN values
-    r[count_2] = r[values].map(lambda x: i2.value_counts()[x] if x in i2.value_counts() else i2.isna().sum() if pd.isna(x) else 0)
+    r[count_2] = r['selected_values'].map(lambda x: int(i2.value_counts()[x]) if x in i2.value_counts() else i2.isna().sum() if pd.isna(x) else 0)
 
     # Show absent values first
     r = r.sort_values(by=[count_1, count_2], ascending=[True, True])
